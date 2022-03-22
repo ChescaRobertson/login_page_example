@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Register an Account</h1>
+    
+    <form action="register" method="POST">
+      <div class="form-control">
+        <label>First Name</label> </br>
+        <input type="text" class="f_name" id="f_name" name="f_name" />
+      </div>
+      <div class="form-control">
+        <label>Last Name</label> </br>
+        <input type="text" class="l_name" id="l_name" name="l_name" />
+      </div>
+      <div class="form-control">
+        <label>Username</label> </br>
+        <input type="text" class="username" id="username" name="username" />
+      </div>
+      <div class="form-control">
+        <label>Password</label> </br>
+        <input type="password" class="password" id="password" name="password" />
+      </div>
+      <button class="btn">Register</button>
+      <p class="text">Already have an account? <a href="/login">Login</a></p>
+    </form>
+    <div class="message">
+      <p><%=message%></p>
+    </div>
+  </div>
+  </body>
+</html>
