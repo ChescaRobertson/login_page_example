@@ -7,17 +7,7 @@
     <title>Welcome</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <nav class="nav">
-    <div class="nav-container">
-      <h1 class="logo">My Website</h1>
-      <ul>
-        <li><a href="/welcome">Home</a></li>
-        <li><a href="/edit">Edit User</a></li>
-        <li><a href="/admin">Admin</a></li>
-        <li><a href="/login">Logout</a></li>
-      </ul>
-    </div>
-  </nav>
+  <%- include('partials/nav') %>
   <body>
     <h1>Welcome <%= firstName %> <%= lastName %></h1>
     <div class="message-success">

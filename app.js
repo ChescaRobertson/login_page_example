@@ -38,16 +38,22 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/edit', (req, res) => {
-  processEditProfile(req, res);
+  if(isLoggedIn()) {
+    console.log('In if');
+    processEditProfile(req, res);
+  } else {
+    res.render('login', { message: '' });
+  }
+  //processEditProfile(req, res);
 });
 
-app.get('/welcome', (req, res) => {
-  res.render('welcome', {
-    firstName: user.getFirstName,
-    lastName: user.getLastName,
-    message: '',
-  });
-});
+// app.get('/welcome', (req, res) => {
+//   res.render('welcome', {
+//     firstName: user.getFirstName,
+//     lastName: user.getLastName,
+//     message: '',
+//   });
+// });
 
 app.post('/edit', (req, res) => {
   let newPassword = req.body.password;
@@ -62,7 +68,21 @@ app.post('/edit', (req, res) => {
   }
 });
 
-app.get('/logout', (req, res) => {});
+app.get('/admin', (req, res) => {
+  processAdmin(req, res)
+});
+
+app.post('/makeAdmin', (req, res) => {
+  makeAdmin(req.body, req, res)
+})
+
+app.post('/removeAdmin', (req, res) => {
+  removeAdmin(req.body, req, res)
+})
+
+app.post('/deleteUser', (req, res) => {
+  deleteUser(req.body, req, res)
+})
 
 function createUser(params, res) {
   let firstName = params.firstName;
@@ -83,12 +103,7 @@ function createUser(params, res) {
 }
 
 function logoutUser() {
-  user.setUsername = '';
-  user.setPassword = '';
-  user.setId = '';
-  user.setFirstName = '';
-  user.setLastName = '';
-  user.setIsAdmin = '';
+  delete user;
 }
 
 function processLogin(params, res) {
@@ -143,6 +158,8 @@ function processEditProfile(params, res) {
   res.render('edit', {
     username: user.getUsername,
     password: user.getPassword,
+    firstName: user.getFirstName,
+    lastName: user.getLastName,
     message: '',
   });
 }
@@ -164,6 +181,73 @@ function updateProfile(newPassword, res) {
         lastName: user.getLastName,
         message: 'Password Updated Succesfully',
       });
+    }
+  });
+}
+
+function isLoggedIn() {
+  if (user.getId || user.getUsername == undefined) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function processAdmin(req, res) {
+  let tableName = 'testtable';
+  let myQuery = `SELECT * FROM "${tableName}"`;
+  client.query(myQuery, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let data = result.rows;
+      res.render('admin', { data: data });
+    }
+  });
+}
+
+function makeAdmin(params, req, res) {
+  let id = params.hiddenAdminId
+
+  let tableName = 'testtable';
+  let myQuery = `UPDATE "${tableName}" SET "isAdmin" = 'Y' WHERE id = ${id}`;
+  client.query(myQuery, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      processAdmin(req, res);
+    }
+  });
+}
+
+function removeAdmin(params, req, res) {
+  let id = params.hiddenRemoveAdminId
+ 
+  let tableName = 'testtable';
+  let myQuery = `UPDATE "${tableName}" SET "isAdmin" = 'N' WHERE id = ${id}`;
+  client.query(myQuery, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      processAdmin(req, res);
+    }
+  });
+}
+
+
+function deleteUser(params, req, res) {
+  let id = params.hiddenId
+ 
+  let tableName = 'testtable';
+  let myQuery = `DELETE FROM "${tableName}" WHERE id = ${id}`;
+  client.query(myQuery, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    } else {
+      processAdmin(req, res);
     }
   });
 }

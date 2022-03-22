@@ -7,20 +7,16 @@
     <title>Login</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <nav class="nav">
-    <div class="nav-container">
-      <h1 class="logo">My Website</h1>
-      <ul>
-        <li><a href="/welcome">Home</a></li>
-        <li><a href="/edit">Edit User</a></li>
-        <li><a href="/admin">Admin</a></li>
-        <li><a href="/login">Logout</a></li>
-      </ul>
-    </div>
-  </nav>
+  <%- include('partials/nav') %>
   <body>
     <div class="container">
       <form action="edit" method="POST">
+        <div class="form-control">
+          <label>First Name: <%=firstName%></label> </br>
+        </div>
+        <div class="form-control">
+          <label>Last Name: <%=lastName%></label> </br>
+        </div>
         <div class="form-control">
           <label>Username: <%=username%></label> </br>
         </div>
@@ -33,15 +29,9 @@
             name="password"
             value="<%=password%>"
           />
-        
         </div>
         <button class="btn">Update Password</button>
-         <p><a href="/welcome" >Return Home</a></p>
-
       </form>
-      <!-- <div class="message">
-        <p><%=message%></p> -->
-      <!-- </div> -->
     </div>
   </body>
 </html>
