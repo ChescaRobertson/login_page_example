@@ -1,6 +1,6 @@
 :root {
   --dwp-color: #2ba197;
-  --dark-color: #a9a9a9;
+  --dark-color: #585353;
   --background-color: #faf9f6;
 }
 
@@ -68,7 +68,7 @@ body {
 /*************************************************/
 
 .container {
-  background-color: var(--dark-color);
+  background-color: var(--dwp-color);
   /*background-color: rgba(0, 0, 0, 0.4);*/
   padding: 20px 40px;
   border-radius: 5px;
@@ -82,14 +82,14 @@ body {
 
 .container a {
   text-decoration: none;
-  color: var(--dwp-color);
+  color: var(--dark-color);
 }
 
 .btn {
   cursor: pointer;
   display: inline-block;
   width: 100%;
-  background: var(--dwp-color);
+  background: var(--dark-color);
   padding: 15px;
   font-family: inherit;
   font-size: 16px;
