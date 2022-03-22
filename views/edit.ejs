@@ -18,11 +18,9 @@
   </nav>
   <body>
     <div class="container">
-      <h1>Please Login</h1>
-      <form action="login" method="POST">
+      <form action="edit" method="POST">
         <div class="form-control">
-          <label>Username</label> </br>
-          <input type="text" class="username" id="username" name="username" />
+          <label>Username: <%=username%></label> </br>
         </div>
         <div class="form-control">
           <label>Password</label> </br>
@@ -31,16 +29,16 @@
             class="password"
             id="password"
             name="password"
+            value="<%=password%>"
           />
         
         </div>
-        <button class="btn">Login</button>
+        <button class="btn">Update Password</button>
 
-        <p class="text">Don't have an account? <a href="/register">Register</a></p>
       </form>
-      <div class="message">
-        <p><%=message%></p>
-      </div>
+      <!-- <div class="message">
+        <p><%=message%></p> -->
+      <!-- </div> -->
     </div>
   </body>
 </html>

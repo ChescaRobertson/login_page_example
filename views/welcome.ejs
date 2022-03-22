@@ -7,9 +7,18 @@
     <title>Welcome</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <nav class="nav">
     <div class="container">
-      <h1>Welcome <%= data[0].f_name %> <%= data[0].l_name %></h1>
+      <h1 class="logo">My Website</h1>
+      <ul>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/edit">Edit User</a></li>
+        <li><a href="/admin">Admin</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
     </div>
+  </nav>
+  <body>
+    <h1>Welcome <%= firstName %> <%= lastName %></h1>
   </body>
 </html>

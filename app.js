@@ -5,6 +5,9 @@ const client = require('./db.js');
 const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
+const User = require('./user.js');
+const { get } = require('express/lib/response');
+let user = new User();
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,15 +36,23 @@ app.post('/register', (req, res) => {
   createUser(req.body, res);
 });
 
+app.get('/edit', (req, res) => {
+  processEditProfile(req, res);
+});
+
+app.post('/edit', (req, res) => {
+  updateProfile(req, red);
+});
+
 function createUser(params, res) {
-  let f_name = params.f_name;
-  let l_name = params.l_name;
+  let firstName = params.firstName;
+  let lastName = params.lastName;
   let username = params.username;
   let password = params.password;
 
   let tableName = 'testtable';
   let columnName = 'f_name, l_name, id, username, password';
-  let myQuery = `INSERT INTO "${tableName}" (${columnName}) VALUES ('${f_name}', '${l_name}', DEFAULT, '${username}', '${password}')`;
+  let myQuery = `INSERT INTO "${tableName}" (${columnName}) VALUES ('${firstName}', '${lastName}', DEFAULT, '${username}', '${password}')`;
   client.query(myQuery, (err, result) => {
     if (err) {
       res.render('register', { message: 'Username already exists' });
@@ -54,14 +65,27 @@ function createUser(params, res) {
 function processLogin(params, res) {
   let password = params.password;
   let username = params.username;
+  console.log(password);
 
   let tableName = 'testtable';
   let columnName = 'username';
-  let myQuery = `SELECT password FROM "${tableName}" WHERE ${columnName} = '${username}'`;
+  let myQuery = `SELECT password, id, "firstName", "lastName", "isAdmin" FROM "${tableName}" WHERE ${columnName} = '${username}'`;
+  console.log(myQuery);
   client.query(myQuery, (err, result) => {
     try {
+      console.log(result.rows[0].password);
       if (result.rows[0].password === password) {
-        getUserData(username, res);
+        user.setUsername = username;
+        user.setPassword = password;
+        user.setId = result.rows[0].id;
+        user.setFirstName = result.rows[0].firstName;
+        user.setLastName = result.rows[0].lastName;
+        user.setIsAdmin = result.rows[0].isAdmin;
+        console.table(user);
+        res.render('welcome', {
+          firstName: user.getFirstName,
+          lastName: user.getLastName,
+        });
       } else {
         res.render('login', { message: 'Invalid username or password' });
       }
@@ -84,6 +108,18 @@ function getUserData(username, res) {
     }
   });
 }
+
+function processEditProfile(params, res) {
+  res.render('edit', {
+    username: user.getUsername,
+    password: user.getPassword,
+    message: '',
+  });
+}
+
+// function updateProfile(params, req) {
+//   let newPassword =
+// }
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

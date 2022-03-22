@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 body {
-  background-color: steelblue;
+  background-color: #2ba197;
   color: #fff;
   font-family: 'Muli', sans-serif;
   display: flex;
@@ -13,6 +13,52 @@ body {
   overflow: hidden;
   margin: 0;
 }
+
+/****************** Nav Styling ********************/
+
+.nav {
+  position: fixed;
+  background-color: #2ba197;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.nav .logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 30px;
+}
+
+.nav ul {
+  display: flex;
+  list-style-type: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 30px;
+}
+
+.nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 7px 15px;
+}
+
+.nav a.current,
+.nav a:hover {
+  color: #fff;
+  font-weight: bold;
+}
+
+/*************************************************/
 
 .container {
   background-color: rgba(0, 0, 0, 0.4);
@@ -27,14 +73,14 @@ body {
 
 .container a {
   text-decoration: none;
-  color: lightblue;
+  color: #a1a1a1;
 }
 
 .btn {
   cursor: pointer;
   display: inline-block;
   width: 100%;
-  background: lightblue;
+  background: #a1a1a1;
   padding: 15px;
   font-family: inherit;
   font-size: 16px;

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DEBUG=app nodemon app.js",
+    "debug": "DEBUG=* nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +16,10 @@
     "express": "^4.17.3",
     "http": "^0.0.1-security",
     "nodemon": "^2.0.15",
+    "nodemonConfig": {
+      "restartable": "rs",
+      "delay": "2500"
+    },
     "path": "^0.12.7",
     "pg": "^8.7.3"
   }
