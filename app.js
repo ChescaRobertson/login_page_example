@@ -35,34 +35,8 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  UsernameExists(req.body, res);
+  createUser(req.body, res);
 });
-
-function UsernameExists(params, res) {
-  let username = params.username;
-  let userexists = false;
-
-  let tableName = 'testtable';
-  let columnName = 'username';
-  let myQuery = `SELECT ${columnName} FROM "${tableName}"`;
-  console.log(myQuery);
-  client.query(myQuery, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      for (let i = 0; i < result.rows.length; i++) {
-        if (result.rows[i].username === username) {
-          res.render('register', { message: 'Username already exists' });
-          userexists = true;
-          break;
-        }
-      }
-    }
-    if (!userexists) {
-      createUser(params, res);
-    }
-  });
-}
 
 function createUser(params, res) {
   let f_name = params.f_name;
@@ -76,7 +50,7 @@ function createUser(params, res) {
   console.log(myQuery);
   client.query(myQuery, (err, result) => {
     if (err) {
-      console.log(err);
+      res.render('register', { message: 'Username already exists' });
     } else {
       res.render('login', { message: 'Account registered succesfully' });
     }
