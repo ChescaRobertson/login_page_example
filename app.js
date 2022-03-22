@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
+  //logoutUser();
   res.render('login', { message: '' });
 });
 
@@ -41,8 +42,19 @@ app.get('/edit', (req, res) => {
 });
 
 app.post('/edit', (req, res) => {
-  updateProfile(req, red);
+  let newPassword = req.body.password;
+  if (newPassword === user.getPassword) {
+    res.render('welcome', {
+      firstName: user.getFirstName,
+      lastName: user.getLastName,
+      message: '',
+    });
+  } else {
+    updateProfile(newPassword, res);
+  }
 });
+
+app.get('/logout', (req, res) => {});
 
 function createUser(params, res) {
   let firstName = params.firstName;
@@ -85,6 +97,7 @@ function processLogin(params, res) {
         res.render('welcome', {
           firstName: user.getFirstName,
           lastName: user.getLastName,
+          message: '',
         });
       } else {
         res.render('login', { message: 'Invalid username or password' });
@@ -117,9 +130,26 @@ function processEditProfile(params, res) {
   });
 }
 
-// function updateProfile(params, req) {
-//   let newPassword =
-// }
+function updateProfile(newPassword, res) {
+  let username = user.getUsername;
+  console.log(newPassword);
+
+  let tableName = 'testtable';
+  let columnName = 'username';
+  let myQuery = `UPDATE "${tableName}" SET password='${newPassword}' WHERE ${columnName} = '${username}'`;
+  console.log(myQuery);
+  client.query(myQuery, (err, result) => {
+    if (err) {
+      console.log(error);
+    } else {
+      res.render('welcome', {
+        firstName: user.getFirstName,
+        lastName: user.getLastName,
+        message: 'Password Updated Succesfully',
+      });
+    }
+  });
+}
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
