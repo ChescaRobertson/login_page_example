@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  //logoutUser();
+  logoutUser();
   res.render('login', { message: '' });
 });
 
@@ -39,6 +39,14 @@ app.post('/register', (req, res) => {
 
 app.get('/edit', (req, res) => {
   processEditProfile(req, res);
+});
+
+app.get('/welcome', (req, res) => {
+  res.render('welcome', {
+    firstName: user.getFirstName,
+    lastName: user.getLastName,
+    message: '',
+  });
 });
 
 app.post('/edit', (req, res) => {
@@ -72,6 +80,15 @@ function createUser(params, res) {
       res.render('login', { message: 'Account registered succesfully' });
     }
   });
+}
+
+function logoutUser() {
+  user.setUsername = '';
+  user.setPassword = '';
+  user.setId = '';
+  user.setFirstName = '';
+  user.setLastName = '';
+  user.setIsAdmin = '';
 }
 
 function processLogin(params, res) {

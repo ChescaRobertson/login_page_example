@@ -1,9 +1,15 @@
+:root {
+  --dwp-color: #2ba197;
+  --dark-color: #a9a9a9;
+  --background-color: #faf9f6;
+}
+
 * {
   box-sizing: border-box;
 }
 body {
-  background-color: #2ba197;
-  color: #fff;
+  background-color: var(--background-color);
+  color: var(--dark-color);
   font-family: 'Muli', sans-serif;
   display: flex;
   flex-direction: column;
@@ -18,13 +24,13 @@ body {
 
 .nav {
   position: fixed;
-  background-color: #2ba197;
+  background-color: var(--dwp-color);
   top: 0;
   left: 0;
   right: 0;
 }
 
-.nav .container {
+.nav .nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,6 +42,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0px 30px;
+  color: #fff;
 }
 
 .nav ul {
@@ -54,16 +61,18 @@ body {
 
 .nav a.current,
 .nav a:hover {
-  color: #fff;
+  color: var(--dark-color);
   font-weight: bold;
 }
 
 /*************************************************/
 
 .container {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--dark-color);
+  /*background-color: rgba(0, 0, 0, 0.4);*/
   padding: 20px 40px;
   border-radius: 5px;
+  color: #fff;
 }
 
 .container h1 {
@@ -73,19 +82,20 @@ body {
 
 .container a {
   text-decoration: none;
-  color: #a1a1a1;
+  color: var(--dwp-color);
 }
 
 .btn {
   cursor: pointer;
   display: inline-block;
   width: 100%;
-  background: #a1a1a1;
+  background: var(--dwp-color);
   padding: 15px;
   font-family: inherit;
   font-size: 16px;
   border: 0;
   border-radius: 5px;
+  color: #fff;
 }
 
 /* Adds click effect */
@@ -137,6 +147,10 @@ body {
   min-width: 5px;
 }
 
-.message {
+.message-error {
   color: rgb(233, 75, 75);
+}
+
+.message-success {
+  color: green;
 }
