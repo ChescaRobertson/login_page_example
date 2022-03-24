@@ -1,11 +1,11 @@
 class User {
-  constructor(id, f_name, l_name, username, password, is_admin) {
+  constructor(id, firstName, lastName, username, password, isAdmin) {
     this.id = id;
-    this.firstName = f_name;
-    this.lastName = l_name;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.username = username;
     this.password = password;
-    this.isAdmin = is_admin;
+    this.isAdmin = isAdmin;
   }
 
   get getId() {

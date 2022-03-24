@@ -85,6 +85,14 @@ body {
   color: var(--dark-color);
 }
 
+.table-container {
+  background-color: var(--dwp-color);
+  /*background-color: rgba(0, 0, 0, 0.4);*/
+  padding: 20px 40px;
+  border-radius: 5px;
+  color: var(--dark-color);
+}
+
 .btn {
   cursor: pointer;
   display: inline-block;
@@ -153,4 +161,15 @@ body {
 
 .message-success {
   color: green;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--dwp-color);
+  color: white;
+  text-align: center;
+  padding: 10px;
 }

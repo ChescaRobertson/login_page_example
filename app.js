@@ -38,22 +38,20 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/edit', (req, res) => {
-  if(isLoggedIn()) {
-    console.log('In if');
+  if (isLoggedIn()) {
     processEditProfile(req, res);
   } else {
     res.render('login', { message: '' });
   }
-  //processEditProfile(req, res);
 });
 
-// app.get('/welcome', (req, res) => {
-//   res.render('welcome', {
-//     firstName: user.getFirstName,
-//     lastName: user.getLastName,
-//     message: '',
-//   });
-// });
+app.get('/welcome', (req, res) => {
+  if (isLoggedIn()) {
+    getUserData(req, res);
+  } else {
+    res.render('login', { message: '' });
+  }
+});
 
 app.post('/edit', (req, res) => {
   let newPassword = req.body.password;
@@ -69,20 +67,73 @@ app.post('/edit', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-  processAdmin(req, res)
+  if (isLoggedIn()) {
+    processAdmin(req, res);
+  } else {
+    res.render('login', { message: '' });
+  }
 });
 
 app.post('/makeAdmin', (req, res) => {
-  makeAdmin(req.body, req, res)
-})
+  makeAdmin(req.body, req, res);
+});
 
 app.post('/removeAdmin', (req, res) => {
-  removeAdmin(req.body, req, res)
-})
+  removeAdmin(req.body, req, res);
+});
 
 app.post('/deleteUser', (req, res) => {
-  deleteUser(req.body, req, res)
-})
+  deleteUser(req.body, req, res);
+});
+
+function processLogin(params, res) {
+  let password = params.password;
+  let username = params.username;
+
+  let tableName = 'testtable';
+  let columnName = 'username';
+  let myQuery = `SELECT password, id, "firstName", "lastName", "isAdmin" FROM "${tableName}" WHERE ${columnName} = '${username}'`;
+
+  client.query(myQuery, (err, result) => {
+    try {
+      console.log(result.rows[0].password);
+      if (result.rows[0].password === password) {
+        user.setUsername = username;
+        user.setPassword = password;
+        user.setId = result.rows[0].id;
+        user.setFirstName = result.rows[0].firstName;
+        user.setLastName = result.rows[0].lastName;
+        user.setIsAdmin = result.rows[0].isAdmin;
+        res.render('welcome', {
+          firstName: user.getFirstName,
+          lastName: user.getLastName,
+          message: '',
+        });
+      } else {
+        res.render('login', { message: 'Invalid username or password' });
+      }
+    } catch {
+      res.render('login', { message: 'Invalid username or password' });
+    }
+  });
+}
+
+function isLoggedIn() {
+  if (user.getUsername === undefined) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function logoutUser() {
+  delete user.id;
+  delete user.username;
+  delete user.password;
+  delete user.firstName;
+  delete user.lastName;
+  delete user.isAdmin;
+}
 
 function createUser(params, res) {
   let firstName = params.firstName;
@@ -102,54 +153,22 @@ function createUser(params, res) {
   });
 }
 
-function logoutUser() {
-  delete user;
-}
-
-function processLogin(params, res) {
-  let password = params.password;
-  let username = params.username;
-  console.log(password);
-
-  let tableName = 'testtable';
-  let columnName = 'username';
-  let myQuery = `SELECT password, id, "firstName", "lastName", "isAdmin" FROM "${tableName}" WHERE ${columnName} = '${username}'`;
-  console.log(myQuery);
-  client.query(myQuery, (err, result) => {
-    try {
-      console.log(result.rows[0].password);
-      if (result.rows[0].password === password) {
-        user.setUsername = username;
-        user.setPassword = password;
-        user.setId = result.rows[0].id;
-        user.setFirstName = result.rows[0].firstName;
-        user.setLastName = result.rows[0].lastName;
-        user.setIsAdmin = result.rows[0].isAdmin;
-        console.table(user);
-        res.render('welcome', {
-          firstName: user.getFirstName,
-          lastName: user.getLastName,
-          message: '',
-        });
-      } else {
-        res.render('login', { message: 'Invalid username or password' });
-      }
-    } catch {
-      res.render('login', { message: 'Invalid username or password' });
-    }
-  });
-}
-
-function getUserData(username, res) {
+function getUserData(req, res) {
+  let username = user.getUsername;
   let columnName = 'username';
   let tableName = 'testtable';
   let myQuery = `SELECT * FROM "${tableName}" WHERE ${columnName} = '${username}'`;
   client.query(myQuery, (err, result) => {
     if (err) {
       console.log(err);
+      res.status(500).send(err);
     } else {
       let data = result.rows;
-      res.render('welcome', { data: data });
+      res.render('welcome', {
+        firstName: user.getFirstName,
+        lastName: user.getLastName,
+        message: '',
+      });
     }
   });
 }
@@ -166,12 +185,10 @@ function processEditProfile(params, res) {
 
 function updateProfile(newPassword, res) {
   let username = user.getUsername;
-  console.log(newPassword);
 
   let tableName = 'testtable';
   let columnName = 'username';
   let myQuery = `UPDATE "${tableName}" SET password='${newPassword}' WHERE ${columnName} = '${username}'`;
-  console.log(myQuery);
   client.query(myQuery, (err, result) => {
     if (err) {
       console.log(error);
@@ -183,14 +200,6 @@ function updateProfile(newPassword, res) {
       });
     }
   });
-}
-
-function isLoggedIn() {
-  if (user.getId || user.getUsername == undefined) {
-    return false;
-  } else {
-    return true;
-  }
 }
 
 function processAdmin(req, res) {
@@ -207,7 +216,7 @@ function processAdmin(req, res) {
 }
 
 function makeAdmin(params, req, res) {
-  let id = params.hiddenAdminId
+  let id = params.hiddenAdminId;
 
   let tableName = 'testtable';
   let myQuery = `UPDATE "${tableName}" SET "isAdmin" = 'Y' WHERE id = ${id}`;
@@ -222,8 +231,8 @@ function makeAdmin(params, req, res) {
 }
 
 function removeAdmin(params, req, res) {
-  let id = params.hiddenRemoveAdminId
- 
+  let id = params.hiddenRemoveAdminId;
+
   let tableName = 'testtable';
   let myQuery = `UPDATE "${tableName}" SET "isAdmin" = 'N' WHERE id = ${id}`;
   client.query(myQuery, (err, result) => {
@@ -236,10 +245,9 @@ function removeAdmin(params, req, res) {
   });
 }
 
-
 function deleteUser(params, req, res) {
-  let id = params.hiddenId
- 
+  let id = params.hiddenId;
+
   let tableName = 'testtable';
   let myQuery = `DELETE FROM "${tableName}" WHERE id = ${id}`;
   client.query(myQuery, (err, result) => {
@@ -255,3 +263,5 @@ function deleteUser(params, req, res) {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// Fix header and footer for logged in and not users
