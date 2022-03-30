@@ -2,14 +2,13 @@ const express = require('express');
 const app = express();
 const port = 4000;
 const client = require('./db.js');
-const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
 const User = require('./user.js');
 const { get } = require('express/lib/response');
 let user = new User();
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -17,7 +16,7 @@ app.set('views', 'views'); // Path to views folder
 app.set('view engine', 'ejs'); // Declaring that you are using ejs view engine
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('./index');
 });
 
 app.get('/login', (req, res) => {
@@ -108,12 +107,17 @@ function processLogin(params, res) {
           firstName: user.getFirstName,
           lastName: user.getLastName,
           message: '',
+          adminlink: '<a href="/admin">Admin</a>',
         });
       } else {
-        res.render('login', { message: 'Invalid username or password' });
+        res.render('login', {
+          message: 'Invalid username or password',
+        });
       }
     } catch {
-      res.render('login', { message: 'Invalid username or password' });
+      res.render('login', {
+        message: 'Invalid username or password',
+      });
     }
   });
 }
@@ -142,7 +146,7 @@ function createUser(params, res) {
   let password = params.password;
 
   let tableName = 'testtable';
-  let columnName = 'f_name, l_name, id, username, password';
+  let columnName = '"firstName","lastName" , id, username, password';
   let myQuery = `INSERT INTO "${tableName}" (${columnName}) VALUES ('${firstName}', '${lastName}', DEFAULT, '${username}', '${password}')`;
   client.query(myQuery, (err, result) => {
     if (err) {
@@ -264,4 +268,6 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
-// Fix header and footer for logged in and not users
+// Separate out
+// Refactor
+// TDD
